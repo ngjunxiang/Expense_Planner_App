@@ -1,3 +1,4 @@
+import 'package:expense_planner_app/widgets/chart_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,18 +24,39 @@ class Chart extends StatelessWidget {
         }
       }
 
-      return {'day': DateFormat.E().format(weekday), 'amount': totalSum};
+      return {
+        'day': DateFormat.E().format(weekday).substring(0, 1),
+        'amount': totalSum,
+      };
+    });
+  }
+
+  double get totalSpending {
+    return groupedTransactionValues.fold(0.0, (sum, item) {
+      return sum + item['amount'];
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(groupedTransactionValues);
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(10),
-      child: Row(
-        children: <Widget>[],
+      child: Padding(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactionValues.map((t) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                t['day'],
+                t['amount'],
+                totalSpending == 0.0 ? 0.0 : t['amount'] / totalSpending,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
