@@ -22,6 +22,9 @@ class ExpensePlannerApp extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
+              button: TextStyle(
+                color: Colors.white,
+              ),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
@@ -69,6 +72,12 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _userTransactionsList.add(newTransaction);
+    });
+  }
+
+  void _deleteTransaction(int index) {
+    setState(() {
+      _userTransactionsList.removeAt(index);
     });
   }
 
@@ -120,7 +129,7 @@ class _HomePageState extends State<HomePage> {
               ),
               elevation: 5,
             ),
-            TransactionList(_userTransactionsList),
+            TransactionList(_userTransactionsList, _deleteTransaction),
           ],
         ),
       ),
