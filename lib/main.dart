@@ -62,11 +62,12 @@ class _HomePageState extends State<HomePage> {
 //    ),
   ];
 
-  void _addNewTransaction(String transactionTitle, double transactionAmount) {
+  void _addNewTransaction(String transactionTitle, double transactionAmount,
+      DateTime selectedDate) {
     final newTransaction = Transaction(
       title: transactionTitle,
       amount: transactionAmount,
-      date: DateTime.now(),
+      date: selectedDate,
       id: DateTime.now().toString(),
     );
 
@@ -75,9 +76,9 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _deleteTransaction(int index) {
+  void _deleteTransaction(String id) {
     setState(() {
-      _userTransactionsList.removeAt(index);
+      _userTransactionsList.removeWhere((transaction) => transaction.id == id);
     });
   }
 
