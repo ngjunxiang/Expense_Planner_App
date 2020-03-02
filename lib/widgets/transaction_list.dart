@@ -11,60 +11,71 @@ class TransactionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 450,
-      child: transactionsList.isEmpty
-          ? Column(
-              children: <Widget>[
-                Text(
-                  'No transactions yet!',
-                  style: Theme.of(context).textTheme.title,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
+    return transactionsList.isEmpty
+        ? LayoutBuilder(
+            builder: (ctx, constraints) {
+              return Column(
+                children: <Widget>[
+                  Text(
+                    'No transactions yet!',
+                    style: Theme.of(context).textTheme.title,
                   ),
-                ),
-              ],
-            )
-          : ListView.builder(
-              itemBuilder: (ctx, index) {
-                return Card(
-                  elevation: 2,
-                  margin: EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 5,
+                  SizedBox(
+                    height: 20,
                   ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: EdgeInsets.all(6),
-                        child: FittedBox(
-                          child: Text(
-                              '\$${transactionsList[index].amount.toStringAsFixed(2)}'),
-                        ),
+                  Container(
+                    height: constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      'assets/images/waiting.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
+        : ListView.builder(
+            itemBuilder: (ctx, index) {
+              return Card(
+                elevation: 2,
+                margin: EdgeInsets.symmetric(
+                  vertical: 8,
+                  horizontal: 5,
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    radius: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(6),
+                      child: FittedBox(
+                        child: Text(
+                            '\$${transactionsList[index].amount.toStringAsFixed(2)}'),
                       ),
                     ),
-                    title: Text(
-                      '${transactionsList[index].title}',
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                    subtitle: Text(
-                      DateFormat.yMMMd().format(transactionsList[index].date),
-                    ),
-                    trailing: IconButton(
-                      icon: Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
-                      onPressed: () => deleteHandler(transactionsList[index].id),
-                    ),
                   ),
-                );
+                  title: Text(
+                    '${transactionsList[index].title}',
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                  subtitle: Text(
+                    DateFormat.yMMMd().format(transactionsList[index].date),
+                  ),
+                  trailing: MediaQuery.of(context).size.width > 460
+                      ? FlatButton.icon(
+                          label: Text('Delete'),
+                          icon: Icon(Icons.delete),
+                          textColor: Theme.of(context).errorColor,
+                          onPressed: () =>
+                              deleteHandler(transactionsList[index].id),
+                        )
+                      : IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Theme.of(context).errorColor,
+                          onPressed: () =>
+                              deleteHandler(transactionsList[index].id),
+                        ),
+                ),
+              );
 //                return Card(
 //                  child: Row(
 //                    children: <Widget>[
@@ -108,9 +119,8 @@ class TransactionList extends StatelessWidget {
 //                    ],
 //                  ),
 //                );
-              },
-              itemCount: transactionsList.length,
-            ),
-    );
+            },
+            itemCount: transactionsList.length,
+          );
   }
 }
